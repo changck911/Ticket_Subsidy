@@ -15,12 +15,12 @@ class CreateLogsTable extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('UID')->length(20);
-            $table->integer('TID')->length(20);
-            $table->integer('OID')->length(20);
-            $table->integer('IID')->length(20);
-            $table->integer('AID')->length(20);
-            $table->integer('VID')->length(20);
+            $table->bigInteger('UID');
+            $table->bigInteger('TID');
+            $table->bigInteger('OID');
+            $table->bigInteger('IID');
+            $table->bigInteger('AID');
+            $table->bigInteger('VID');
             $table->string('Action');
             $table->timestamps();
         });

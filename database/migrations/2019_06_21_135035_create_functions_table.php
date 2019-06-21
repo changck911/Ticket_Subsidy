@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVillagesTable extends Migration
+class CreateFunctionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateVillagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('villages', function (Blueprint $table) {
+        Schema::create('functions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('Name',6);
-            $table->bigInteger('UID');
+            $table->string('Name');
+            $table->boolean('Status')->default(1);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateVillagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('villages');
+        Schema::dropIfExists('functions');
     }
 }

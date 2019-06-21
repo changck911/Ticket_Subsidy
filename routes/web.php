@@ -18,9 +18,13 @@ Route::get('/', function () {
 
 Route::get('/login','TicketController@index');
 
+Route::get('/register','TicketController@register');
+Route::post('/register',function(){return 123;});
+
 Route::get('/main','TicketController@main');
 
 Route::get('/money' ,'TicketController@money');
 
 Route::get('/test',function(){ echo encrypt('123');});
 
+Route::get('/db_test','TicketController@db_test');
