@@ -15,4 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/ticket','TicketController@index');
+Route::get('/login','TicketController@index');
+
+Route::get('/main','TicketController@main');
+
+Route::get('/money' ,'TicketController@money');
