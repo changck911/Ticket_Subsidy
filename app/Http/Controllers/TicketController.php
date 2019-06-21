@@ -10,9 +10,18 @@ class TicketController extends Controller
     public function index(){
         return view('ticket/v_login');
     }
-    public function register(){
-        return view('ticket/v_register');
+
+    public function register(Request $request){
+        $create = new User();
+        $create->Account = $request->Account;
+        $create->Passwd = encrypt($request->Passwd);
+        $create->Name = $request->Name;
+        $create->Phone = $request->Phone;
+        $create->save();
+        echo "<script>alert('註冊成功，請登入。');</script>";
+        return redirect('login');
     }
+    
     public function main(){
         return view('ticket/v_main');
     }
@@ -20,12 +29,8 @@ class TicketController extends Controller
         return view('ticket/v_money');
     }
     public function db_test(){
-        $create = new User();
-        $create->Account = "test";
-        $create->Passwd = encrypt("test");
-        $create->Name = "test";
-        $create->Phone = "test";
-        $create->save();
-        return $create;
+        $create = User::where('id',1)->get()->makeVisible(['Passwd'])->toArray();
+        
+        print_r(decrypt($create[0]['Passwd']));
     }
 }

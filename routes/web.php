@@ -18,8 +18,9 @@ Route::get('/', function () {
 
 Route::get('/login','TicketController@index');
 
-Route::get('/register','TicketController@register');
-Route::post('/register',function(){return 123;});
+Route::get('/register',function(){return view('ticket/v_register');});
+
+Route::post('/register','TicketController@register')->middleware(['register']);
 
 Route::get('/main','TicketController@main');
 
