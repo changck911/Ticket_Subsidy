@@ -1,5 +1,6 @@
 <?php
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,3 +21,6 @@ Route::get('/login','TicketController@index');
 Route::get('/main','TicketController@main');
 
 Route::get('/money' ,'TicketController@money');
+
+Route::get('/test',function(){ echo encrypt('123');});
+

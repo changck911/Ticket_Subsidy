@@ -15,11 +15,12 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('IDNum');
+            $table->string('IDNum')->length(10);
+            $table->integer('Month')->length(2);            
             $table->integer('Price')->length(3);
-            $table->string('Neiber');
-            $table->string('LN');
-            $table->integer('LID')->length(20);
+            $table->string('village')->length(6);
+            $table->string('Num');
+            $table->integer('Status')->length(1)->default(1);
             $table->timestamps();
         });
     }

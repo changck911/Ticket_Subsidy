@@ -17,6 +17,10 @@ class CreateLogsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('UID')->length(20);
             $table->integer('TID')->length(20);
+            $table->integer('OID')->length(20);
+            $table->integer('IID')->length(20);
+            $table->integer('AID')->length(20);
+            $table->integer('VID')->length(20);
             $table->string('Action');
             $table->timestamps();
         });

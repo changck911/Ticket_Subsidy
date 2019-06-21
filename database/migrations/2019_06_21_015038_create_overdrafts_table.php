@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateOverdraftsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('overdrafts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('Account');
-            $table->longText('Passwd');
-            $table->string('Phone');
-            $table->string('Name');
-            $table->string('Token')->lenth(32)->default(md5('123321'));
-            $table->integer('Permission')->length(1)->default(1);
+            $table->integer('Price')->length(6);
+            $table->integer('Status')->length(1)->default(1);
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('overdrafts');
     }
 }
