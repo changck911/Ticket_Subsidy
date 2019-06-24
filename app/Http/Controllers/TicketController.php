@@ -7,10 +7,6 @@ use App\User;
 
 class TicketController extends Controller
 {
-    public function index(){
-        return view('ticket/v_login');
-    }
-
     public function register(Request $request){
         $create = new User();
         $create->Account = $request->Account;
@@ -21,7 +17,9 @@ class TicketController extends Controller
         echo "<script>alert('註冊成功，請登入。');</script>";
         return redirect('login');
     }
-    
+    public function login(Request $request){
+
+    }
     public function main(){
         return view('ticket/v_main');
     }

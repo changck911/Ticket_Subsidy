@@ -16,7 +16,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login','TicketController@index');
+Route::get('/login',function(){return view('ticket/v_login');});
 
 Route::get('/register',function(){return view('ticket/v_register');});
 
