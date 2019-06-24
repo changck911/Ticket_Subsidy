@@ -4,9 +4,6 @@
 @section('head-name', "帳戶資訊")
 
 
-@section('top-bar-name', "張鶴")
-
-
 @section('page-content')
 <div class="row">
 

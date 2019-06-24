@@ -16,7 +16,7 @@
 //     return view('welcome');
 // });
 
-Route::get('/',function(){return view('ticket/v_main');})->middleware(['status']);
+Route::get('/',function(){return redirect('/money');})->middleware(['status']);
 
 
 Route::get('/login',function(){return view('ticket/v_login');});
@@ -25,8 +25,11 @@ Route::post('/login','TicketController@login')->middleware(['login']);
 Route::get('/register',function(){return view('ticket/v_register');});
 Route::post('/register','TicketController@register')->middleware(['register']);
 
-Route::get('/main',function(){return view('ticket/v_main');})->middleware(['status']);
+Route::get('/main','TicketController@index')->middleware(['status']);
 
 Route::get('/money' ,'TicketController@money')->middleware(['status']);
+Route::post('/search','TicketController@search')->middleware(['status','ticket']);
+
+Route::post('/new_data','TicketController@new_ticket')->middleware(['status','ticket']);
 
 Route::get('/logout' ,'TicketController@logout');

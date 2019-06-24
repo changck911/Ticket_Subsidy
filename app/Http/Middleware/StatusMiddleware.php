@@ -17,8 +17,8 @@ class StatusMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Session::has('id') && Session::has('Token')) {
-            switch ($this->verify_status(Session::get('id'), Session::get('Token'))) {
+        if (Session::has('Token')) {
+            switch ($this->verify_status(Session::get('Token'))) {
                 case 0:
                     echo "<script>alert('權杖失效，請重新登入');</script>";
                     Session::flush();
@@ -36,15 +36,11 @@ class StatusMiddleware
             return redirect('/login');
         }
     }
-    public function verify_status($id, $token)
+    public function verify_status($token)
     {
-        $query_user = User::where('id', $id)->get()->makeVisible(['Token'])->toArray();
+        $query_user = User::where('Token', $token)->get()->toArray();
         if ($query_user) {
-            if ($query_user[0]['Token'] == $token) {
-                return 200;
-            } else {
-                return 0;
-            }
+            return 200;
         } else {
             return 0;
         }

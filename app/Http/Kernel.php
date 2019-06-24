@@ -64,6 +64,7 @@ class Kernel extends HttpKernel
         'register' => \App\Http\Middleware\RegisterMiddleware::class,
         'login' => \App\Http\Middleware\LoginMiddleware::class,
         'status' => \App\Http\Middleware\StatusMiddleware::class,
+        'ticket' => \App\Http\Middleware\TicketMiddleware::class,
     ];
 
     /**

@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Ticket;
 use Carbon;
 use Illuminate\Support\Facades\Session;
 
 class TicketController extends Controller
 {
-    public function register(Request $request){
+    public function register(Request $request)
+    {
         $create = new User();
         $create->Account = $request->Account;
         $create->Passwd = encrypt($request->Passwd);
@@ -19,21 +21,82 @@ class TicketController extends Controller
         echo "<script>alert('註冊成功，請登入。');</script>";
         return redirect('login');
     }
-    public function login(Request $request){
-        $token = md5($this->time().$request->Account);
-        User::where('Account',$request->Account)->update(['Token'=>$token]);
-        Session::put('Token',$token);
-        return redirect('/money');
+    public function login(Request $request)
+    {
+        $query_user = User::where('Account', $request->Account)->get()->toArray();
+        Session::put('UID', $query_user[0]['id']);
+        Session::put('Name', $query_user[0]['Name']);
+        $token = md5($this->time() . $request->Account);
+        User::where('Account', $request->Account)->update(['Token' => $token]);
+        Session::put('Token', $token);
+        $this->calculate();
+        return redirect('/');
     }
-    public function logout(){
+    public function logout()
+    {
         Session::flush();
         return redirect('/');
     }
-    public function money(){
+    public function money()
+    {
         return view('ticket/v_money');
     }
-    public function time(){
+    public function index()
+    {
+        if (Session::has('IDNum')) {
+            for ($i = 0; $i < count(Session::get('Month')); $i++) {
+                $query_tciket['data'][$i] = Ticket::where('IDNum', Session::get('IDNum'))->where('Month', Session::get('Month')[$i])->get()->toArray();
+                $query_tciket['sum'][$i]['sum'] = 0;
+                for ($j = 0; $j < count($query_tciket['data'][$i]); $j++) {
+                    $query_tciket['sum'][$i]['sum'] += $query_tciket['data'][$i][$j]['Price'];
+                }
+            }
+            return view('ticket/v_main', $query_tciket);
+        } else {
+            return view('ticket/v_main');
+        }
+    }
+    public function search(Request $request)
+    {
+        Session::put('IDNum', $request->IDNum);
+        for ($i = 0; $i < count(Session::get('Month')); $i++) {
+            $query_tciket['data'][$i] = Ticket::where('IDNum', Session::get('IDNum'))->where('Month', Session::get('Month')[$i])->get()->toArray();
+            $query_tciket['sum'][$i]['sum'] = 0;
+            for ($j = 0; $j < count($query_tciket['data'][$i]); $j++) {
+                $query_tciket['sum'][$i]['sum'] += $query_tciket['data'][$i][$j]['Price'];
+            }
+        }
+        return view('ticket/v_main', $query_tciket);
+    }
+    public function new_ticket(Request $request)
+    {
+        $create = new Ticket();
+        $create->IDNum = $request->IDNum;
+        $create->Month = $request->Month;
+        $create->Price = $request->Price;
+        $create->Village = $request->Village;
+        $create->Num = $request->Num;
+        $create->save();
+        return redirect('/main');
+    }
+    public function time()
+    {
         $mytime = Carbon\Carbon::now();
         return $mytime->toDateTimeString();
+    }
+    public function calculate()
+    {
+        $slit_time = explode("-", date("Y-m-d"));
+        $month = (int)$slit_time[1];
+        if ($month == 1) {
+            $month_array = [10, 11, 12];
+        } else if ($month == 2) {
+            $month_array = [1];
+        } else if ($month == 3) {
+            $month_array = [1, 2];
+        } else if ($month >= 4) {
+            $month_array = [$month - 3, $month - 2, $month - 1];
+        }
+        Session::put('Month', $month_array);
     }
 }

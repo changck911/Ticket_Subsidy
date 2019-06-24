@@ -143,16 +143,16 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <form action="{{url('/search')}}" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        @csrf
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="身份證字號"
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
+                                <input type="text" name="IDNum" class="form-control bg-light border-0 small"
+                                    placeholder="身份證字號" aria-label="Search" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div>
                         </div>
                     </form>
 
@@ -187,7 +187,8 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">@yield('top-bar-name')</span>
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{Session::get('Name')}}</span>
                                 <img class="img-profile rounded-circle" src="https://source.unsplash.com/daily/60x60">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -216,7 +217,8 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">@yield('head-name')</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                            data-toggle="modal" data-target="#model_new_data"><i
                                 class="fas fa-edit fa-sm text-white-50"></i> 新增請領資料</a>
                     </div>
 
@@ -245,6 +247,83 @@
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
+
+
+        <!-- Add Data Modal-->
+        <div class="modal fade" id="model_new_data" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form action="{{url('/new_data')}}" method="post">
+                    @csrf
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">新增請領資料</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="text-center">新增請領資料</th>
+                                    </tr>
+                                </thead>
+                                <tr>
+                                    <td class="align-middle">身份證字號：</td>
+                                    <td>
+                                        <input class="form-control" type="text" name="IDNum" pattern="[A-Z]{1}[0-9]{9}"
+                                            title="格式錯誤" autocomplete="off" @if (Session::has('IDNum'))
+                                            value="{{Session::get('IDNum')}}" @else value="" @endif required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">請領月份：</td>
+                                    <td>
+                                        <select class="form-control" name="Month">
+                                            @for($i=0;$i<count(Session::get('Month'));$i++) <option>
+                                                {{Session::get('Month')[$i]}}</option>
+                                                @endfor
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">請領金額：</td>
+                                    <td>
+                                        <input class="form-control" type="number" name="Price" max="600"
+                                            autocomplete="off" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">里別：</td>
+                                    <td>
+                                        <input class="form-control" type="text" name="Village" autocomplete="off"
+                                            required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">本號：</td>
+                                    <td>
+                                        <input class="form-control" type="text" name="Num" autocomplete="off" required>
+                                    </td>
+                                </tr>
+                                <tbody>
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary" type="submit">新增</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
 
         <!-- Bootstrap core JavaScript-->
 

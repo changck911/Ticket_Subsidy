@@ -18,7 +18,7 @@ class CreateTicketsTable extends Migration
             $table->string('IDNum',10);
             $table->integer('Month');            
             $table->integer('Price');
-            $table->string('village',6);
+            $table->string('Village',6);
             $table->string('Num');
             $table->boolean('Status')->default(1);
             $table->timestamps();

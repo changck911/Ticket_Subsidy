@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use App\User;
-use Session;
 
 class LoginMiddleware
 {
@@ -38,7 +37,6 @@ class LoginMiddleware
         $query_user = User::where('Account', $request->Account)->get()->makeVisible(['Passwd'])->toArray();
         if (count($query_user)) {
             if (decrypt($query_user[0]['Passwd']) == $request->Passwd) {
-                Session::put('id', $query_user[0]['id']);
                 return 200;
             } else {
                 return 1;
