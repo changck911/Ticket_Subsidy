@@ -13,7 +13,7 @@ class CreateBlocksTable extends Migration
      */
     public function up()
     {
-        Schema::create('functions', function (Blueprint $table) {
+        Schema::create('blocks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('Name');
             $table->boolean('Status')->default(1);
