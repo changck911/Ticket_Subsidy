@@ -12,20 +12,21 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/',function(){return view('ticket/v_main');})->middleware(['status']);
+
 
 Route::get('/login',function(){return view('ticket/v_login');});
+Route::post('/login','TicketController@login')->middleware(['login']);
 
 Route::get('/register',function(){return view('ticket/v_register');});
-
 Route::post('/register','TicketController@register')->middleware(['register']);
 
-Route::get('/main','TicketController@main');
+Route::get('/main',function(){return view('ticket/v_main');})->middleware(['status']);
 
-Route::get('/money' ,'TicketController@money');
+Route::get('/money' ,'TicketController@money')->middleware(['status']);
 
-Route::get('/test',function(){ echo encrypt('123');});
-
-Route::get('/db_test','TicketController@db_test');
+Route::get('/logout' ,'TicketController@logout');

@@ -22,7 +22,7 @@ class RegisterMiddleware
         switch ($this->check($request)) {
             case -1:
                 echo "<script>alert('非註冊時間');</script>";
-                return redirect('login');
+                return redirect('/');
                 break;
             case 1:
                 echo "<script>alert('資料不得為空');</script>";
@@ -33,18 +33,21 @@ class RegisterMiddleware
             case 3:
                 echo "<script>alert('密碼不吻合');</script>";
                 break;
-
-            default:
+            case 200:
                 return $next($request);
                 break;
+
+            default:
+                echo "<script>alert('錯誤，請重新操作！');</script>";
+                break;
         }
-        return redirect('register');
+        return redirect('/register');
     }
     public function check($request)
     {
-        $query_status = Block::where('Name','register')->get()->toArray();
-        if(count($query_status)){
-            if($query_status[0]['Status']==1){
+        $query_status = Block::where('Name', 'register')->get()->toArray();
+        if (count($query_status)) {
+            if ($query_status[0]['Status'] == 1) {
                 if ($request->Account == "" || $request->Name == "" || $request->Phone == "" || $request->Passwd == "" || $request->Conf_Passwd == "") {
                     return 1;
                 } else {
@@ -54,13 +57,15 @@ class RegisterMiddleware
                     } else {
                         if ($request->Passwd != $request->Conf_Passwd) {
                             return 3;
+                        } else {
+                            return 200;
                         }
                     }
                 }
-            } else{
+            } else {
                 return -1;
             }
-        } else{
+        } else {
             return -1;
         }
     }

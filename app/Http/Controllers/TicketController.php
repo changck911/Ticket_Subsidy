@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Carbon;
+use Illuminate\Support\Facades\Session;
 
 class TicketController extends Controller
 {
@@ -18,17 +20,20 @@ class TicketController extends Controller
         return redirect('login');
     }
     public function login(Request $request){
-
+        $token = md5($this->time().$request->Account);
+        User::where('Account',$request->Account)->update(['Token'=>$token]);
+        Session::put('Token',$token);
+        return redirect('/');
     }
-    public function main(){
-        return view('ticket/v_main');
+    public function logout(){
+        Session::flush();
+        return redirect('/');
     }
     public function money(){
         return view('ticket/v_money');
     }
-    public function db_test(){
-        $create = User::where('id',1)->get()->makeVisible(['Passwd'])->toArray();
-        
-        print_r(decrypt($create[0]['Passwd']));
+    public function time(){
+        $mytime = Carbon\Carbon::now();
+        return $mytime->toDateTimeString();
     }
 }

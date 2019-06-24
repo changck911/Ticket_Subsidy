@@ -44,21 +44,11 @@
                                             @yield('title')
                                         </h1>
                                     </div>
-                                    <form class="user" action="" method="post">
+                                    <form class="user" action="{{url('/login')}}" method="post">
                                         @csrf
-                                        <br><br><br>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control form-control-user" name="ID"
-                                                aria-describedby="emailHelp" placeholder="ID" autocomplete="off"
-                                                required>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control form-control-user" name="Passwd"
-                                                placeholder="Password" autocomplete="off" required>
-                                        </div>
-                                        <br><br>
-                                        <button type="submit" class="btn btn-primary btn-user btn-block">登入</button>
-                                        <br><br><br>
+                                        
+                                        @yield('content')
+                                        
                                     </form>
                                 </div>
                             </div>

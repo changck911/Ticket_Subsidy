@@ -106,7 +106,7 @@
 
       <!-- Nav Item - Tables -->
       <li class="nav-item">
-        <a class="nav-link" href="tables.html">
+        <a class="nav-link" href="{{url('logout')}}">
           <i class="fas fa-fw fa-sign-out-alt"></i>
           <span>登出</span></a>
       </li>
