@@ -23,7 +23,7 @@ class TicketController extends Controller
         $token = md5($this->time().$request->Account);
         User::where('Account',$request->Account)->update(['Token'=>$token]);
         Session::put('Token',$token);
-        return redirect('/');
+        return redirect('/money');
     }
     public function logout(){
         Session::flush();
