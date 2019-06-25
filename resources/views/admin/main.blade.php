@@ -95,7 +95,6 @@
             <div class="sidebar-heading">
                 帳戶相關
             </div>
-
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="{{url('money')}}">
@@ -103,9 +102,25 @@
                     <span>帳戶資訊</span></a>
             </li>
 
+            <li class="nav-item">
+                @if(Session::get('Permission')==1)
+                    <a class="nav-link text-danger" href="{{url('giant')}}">
+                        <i class="fas fa-fw fa-exclamation-triangle"></i>
+                        <span>逾權辦理</span></a>
+                @elseif(Session::get('Permission')==2)
+                    <a class="nav-link text-success" href="{{url('giant')}}">
+                        <i class="fas fa-fw fa-check"></i>
+                        <span>恢復權限</span></a>
+                @else
+                    <a class="nav-link text-warning" href="#">
+                        <i class="fas fa-fw fa-check"></i>
+                        <span>管理員您好</span></a>
+                @endif
+            </li>
+
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#model_change_passwd">
                     <i class="fas fa-fw fa-lock"></i>
                     <span>更改密碼</span></a>
             </li>
@@ -143,16 +158,17 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <form action="{{url('/search')}}" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <form action="{{url('/search')}}" method="post"
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         @csrf
                         <div class="input-group">
-                                <input type="text" name="IDNum" class="form-control bg-light border-0 small"
-                                    placeholder="身份證字號" aria-label="Search" aria-describedby="basic-addon2">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit">
-                                        <i class="fas fa-search fa-sm"></i>
-                                    </button>
-                                </div>
+                            <input type="text" name="IDNum" class="form-control bg-light border-0 small"
+                                placeholder="身份證字號" aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
                         </div>
                     </form>
 
@@ -194,7 +210,8 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                    data-target="#model_change_passwd">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     更改密碼
                                 </a>
@@ -284,7 +301,7 @@
                                         <select class="form-control" name="Month">
                                             @for($i=0;$i<count(Session::get('Month'));$i++) <option>
                                                 {{Session::get('Month')[$i]}}</option>
-                                                @endfor
+                                            @endfor
                                         </select>
                                     </td>
                                 </tr>
@@ -298,8 +315,20 @@
                                 <tr>
                                     <td class="align-middle">里別：</td>
                                     <td>
-                                        <input class="form-control" type="text" name="Village" autocomplete="off"
-                                            required>
+                                        @if(Session::get('Permission')==1)
+                                            <select class="form-control" name="Village">
+                                                @for($i=0;$i<count(Session::get('Village'));$i++) <option>
+                                                    {{Session::get('Village')[$i]}}</option>
+                                                @endfor
+                                            </select>
+                                        @else
+                                            <select class="form-control" name="Village">
+                                                @for($i=0;$i<count(Session::get('All_Village'));$i++) <option>
+                                                    {{Session::get('All_Village')[$i]['Name']}}</option>
+                                                @endfor
+                                            </select>
+                                            
+                                        @endif
                                     </td>
                                 </tr>
                                 <tr>
@@ -324,6 +353,38 @@
             </div>
         </div>
 
+        <!-- Change-Passwd Modal-->
+        <div class="modal fade" id="model_change_passwd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form action="{{url('/change_passwd')}}" method="post">
+                    @csrf
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">更改密碼</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <p>
+                                為保證您帳號的安全性，送出新密碼時系統會將您的密碼加密，請將加密後的字串ＯＡ給車票業務承辦人員。
+                            </p>
+                            <p>
+                                新密碼：
+                                <input class="form-control" type="text" name="Passwd" autocomplete="off" required>
+                            </p>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary" type="submit">轉換</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <!-- Bootstrap core JavaScript-->
 

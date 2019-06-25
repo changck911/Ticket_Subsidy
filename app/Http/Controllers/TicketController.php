@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Ticket;
+use App\Village;
+
 use Carbon;
 use Illuminate\Support\Facades\Session;
 
@@ -23,19 +25,51 @@ class TicketController extends Controller
     }
     public function login(Request $request)
     {
-        $query_user = User::where('Account', $request->Account)->get()->toArray();
+        $query_user = User::where('Account', $request->Account)->get()->makeVisible(['Permission'])->toArray();
+        $query_village = Village::where('UID', $query_user[0]['id'])->get()->toArray();
+        $query_all_village = Village::select('Name')->get()->toArray();
         Session::put('UID', $query_user[0]['id']);
         Session::put('Name', $query_user[0]['Name']);
+        Session::put('Permission', $query_user[0]['Permission']);
         $token = md5($this->time() . $request->Account);
         User::where('Account', $request->Account)->update(['Token' => $token]);
         Session::put('Token', $token);
+        $village[0] = '';
+        for($i=0;$i<count($query_village);$i++){
+            $village[$i+1] = $query_village[$i]['Name'];
+        }
+        Session::put('Village',$village);
+        Session::put('All_Village',$query_all_village);
         $this->calculate();
+        return redirect('/');
+    }
+    public function change_passwd(Request $request){
+        return view('ticket/v_change_passwd',['Passwd'=>encrypt($request->Passwd)]);
+    }
+    public function giant(){
+        if(Session::get('Permission')==1){
+            User::where('id',Session::get('UID'))->update(['Permission'=>2]);
+            Session::put('Permission',2);
+        } else if(Session::get('Permission')==2) {
+            User::where('id',Session::get('UID'))->update(['Permission'=>1]);
+            Session::put('Permission',1);
+        }
         return redirect('/');
     }
     public function logout()
     {
         Session::flush();
         return redirect('/');
+    }
+    public function init_village(){
+        $Name = ['中城里','啟模里','永昌里','國武里','泰昌里','大禹里','源城里','三民里','長良里','樂合里',
+                 '松浦里','觀音里','東豐里','春日里','德武里'];
+        for($i=0;$i<count($Name);$i++){
+            $create = new Village();
+            $create->Name = $Name[$i];
+            $create->UID = 0;
+            $create->save();
+        }
     }
     public function money()
     {
